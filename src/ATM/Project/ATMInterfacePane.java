@@ -17,6 +17,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputControl;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -137,8 +138,8 @@ public class ATMInterfacePane extends GridPane{
 	private void BalanceGui() {
 		// TODO Auto-generated method stub
 		//Elements
-		Label seederLabel = new Label("Balance Check"); 
-		Label portLabel = new Label("Available Balance:"); 
+		Label BalanceLabel = new Label("Balance Check"); 
+		Label AvailableBalanceLabel = new Label("Available Balance:"); 
 		TextField portField = new TextField("2023");
 		Button bindButton = new Button("Withdrawal Amount");  
 		Button addFilesButton = new Button("Withdraw"); 
@@ -147,14 +148,14 @@ public class ATMInterfacePane extends GridPane{
 		Button quitButton = new Button("Quit"); 
 		
 		//Arranging Elements
-		HBox firstHBox = new HBox(5, portLabel, portField, bindButton);
+		HBox firstHBox = new HBox(5, BalanceLabel, portField, bindButton);
 		
-		VBox vBox = new VBox(10, seederLabel, addFilesButton, firstHBox, listArea, statusArea, quitButton); 
+		VBox vBox = new VBox(10, AvailableBalanceLabel, addFilesButton, firstHBox, listArea, statusArea, quitButton); 
 		this.getChildren().add(vBox); 
 		
 		//Styling
-		seederLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-		portLabel.setFont(Font.font("Arial", FontWeight.SEMI_BOLD, 15));
+		AvailableBalanceLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+		BalanceLabel.setFont(Font.font("Arial", FontWeight.SEMI_BOLD, 15));
 		listArea.setEditable(false);
 		statusArea.setEditable(false);
 		portField.setMaxWidth(55);
@@ -188,12 +189,14 @@ public class ATMInterfacePane extends GridPane{
 	private void WithdrawalGui()
 	{
 		//Elements
-		Label seederLabel = new Label("Withdrawal"); 
-		Label portLabel = new Label("Available Balance:"); 
-		TextField portField = new TextField("R "+ AvailableBalance);
-		Button bindButton = new Button("Withdrawal Amount");  
-		Button addFilesButton = new Button("Withdraw"); 
-		TextArea listArea = new TextArea("List: \n"); 
+		Label MainLabel = new Label("Withdrawal"); 
+		Label BalanceLabel = new Label("Available Balance:"); 
+		TextField AvailableField = new TextField("R "+ AvailableBalance);
+		AvailableField.setEditable(false);
+		Label AmountWithdraw = new Label("Enter Withdrawal Amount");  
+		Button WithdrawButton = new Button("Withdraw"); 
+		TextField WithdrawalAmount = new TextField(); 
+		WithdrawalAmount.setPromptText("R100");
 		TextArea statusArea = new TextArea("Status Area: \n"); 
 		Label $Account_Type = new Label("Account Type:"); 
 		ComboBox<String> cBox1 = new ComboBox<>();
@@ -219,17 +222,17 @@ public class ATMInterfacePane extends GridPane{
     	Button quitButton = new Button("Quit"); 
 		
 		//Arranging Elements
-		HBox firstHBox = new HBox(5, portLabel, portField, bindButton,$Account_Type,cBox1);
+		HBox firstHBox = new HBox(5, MainLabel,BalanceLabel, AvailableField);
 		
-		VBox vBox = new VBox(10, seederLabel, addFilesButton, firstHBox, listArea, statusArea, quitButton); 
+		VBox vBox = new VBox(10, MainLabel,  firstHBox,AmountWithdraw ,WithdrawalAmount, $Account_Type,cBox1,WithdrawButton, statusArea, quitButton); 
 		this.getChildren().add(vBox); 
 		
 		//Styling
-		seederLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-		portLabel.setFont(Font.font("Arial", FontWeight.SEMI_BOLD, 15));
-		listArea.setEditable(false);
+		MainLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+		MainLabel.setFont(Font.font("Arial", FontWeight.SEMI_BOLD, 15));
+		
 		statusArea.setEditable(false);
-		portField.setMaxWidth(55);
+		AvailableField.setMaxWidth(55);
 		
 		//adding to the root
 		this.setAlignment(Pos.CENTER);
@@ -238,17 +241,15 @@ public class ATMInterfacePane extends GridPane{
 		//Attributes
 		
 		
-		//actions
-		bindButton.setOnAction((event) ->
-		{
-			
-			
-		});
+	
 		
-		addFilesButton.setOnAction((event) ->
+		WithdrawButton.setOnAction((event) ->
 		{
+			//var Amounttowithdraw = WithdrawalAmount.getText();
 			//read the list file for the last file id wrote
-			
+			if((Integer.parseInt(WithdrawalAmount.getText()) > AvailableBalance)&& (Integer.parseInt(WithdrawalAmount.getText()) <= 0)) {
+				alert(AlertType.INFORMATION, "You Have Insufficient Funds!"); 
+			}
 			
 			
 		});
