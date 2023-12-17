@@ -36,7 +36,8 @@ public class ATMInterfacePane extends GridPane{
 	private String Type = null;
 	private boolean Withdrawal = false;
 	private boolean Deposit = false;
-	
+	private boolean BalanceCheck = false;
+	private double AvailableBalance = 0.00;
 	public ATMInterfacePane(Stage PrimaryStage) {
 		this.primarystage = PrimaryStage;
 		TypeSelector();
@@ -52,7 +53,7 @@ public class ATMInterfacePane extends GridPane{
     	
     	//The mode list 
     	ComboBox<String> cBox = new ComboBox<>();
-    	ObservableList<String> options = FXCollections.observableArrayList("Withdrawal","Deposit Cash");
+    	ObservableList<String> options = FXCollections.observableArrayList("Withdrawal","Deposit Cash","Check Available Balance");
     	cBox.setItems(options);
     	
 		cBox.valueProperty().addListener(new ChangeListener<String>() {
@@ -62,16 +63,19 @@ public class ATMInterfacePane extends GridPane{
 					Type = new String(newValue);
 					Withdrawal = true; 
 					Deposit = false; 
+					BalanceCheck=false;
 				}
-				else if(newValue.equals("Deposit")) {
+				else if(newValue.equals("Deposit Cash")) {
 					Type = new String(newValue);
 					Deposit = true; 
 					Withdrawal = false; 
+					BalanceCheck=false;
 				}
-				else {
+				else if(newValue.equals("Check Available Balance")){
+					Type = new String(newValue);
 					Deposit = false; 
 					Withdrawal = false; 
-					
+					BalanceCheck=true;
 				}
 			}
 		});
@@ -95,9 +99,14 @@ public class ATMInterfacePane extends GridPane{
 		
 		nextButton.setOnAction((event) -> {
 			
-			if( ((Deposit == false) && (Withdrawal==true)) || ((Deposit == true) && (Withdrawal ==false)) )
+			if( ((Deposit == false) && (Withdrawal==true) &&(BalanceCheck == false)) || ((Deposit == true) && (Withdrawal ==false) &&(BalanceCheck == false)) || ((Deposit ==false)&&(Withdrawal ==false)&&(BalanceCheck ==true)))
 			{	
-				alert(AlertType.INFORMATION, "You are doing a "+Type+" Transaction"); 
+				if(BalanceCheck==false) {
+					alert(AlertType.INFORMATION, "You are doing a "+Type+" Transaction"); 
+				}else if(BalanceCheck==true) {
+					alert(AlertType.INFORMATION, "Checking Balance."); 
+				}
+				
 				primarystage.show(); 
 				stage.close(); 
 				
@@ -120,14 +129,15 @@ public class ATMInterfacePane extends GridPane{
 			//gui setup for leecher
 			DepositGui();
 		}
-		else {
+		else if(BalanceCheck == true){
+			BalanceGui();
 		}
 		
 	}
-	private void WithdrawalGui()
-	{
+	private void BalanceGui() {
+		// TODO Auto-generated method stub
 		//Elements
-		Label seederLabel = new Label("Withdrawal"); 
+		Label seederLabel = new Label("Balance Check"); 
 		Label portLabel = new Label("Available Balance:"); 
 		TextField portField = new TextField("2023");
 		Button bindButton = new Button("Withdrawal Amount");  
@@ -138,6 +148,78 @@ public class ATMInterfacePane extends GridPane{
 		
 		//Arranging Elements
 		HBox firstHBox = new HBox(5, portLabel, portField, bindButton);
+		
+		VBox vBox = new VBox(10, seederLabel, addFilesButton, firstHBox, listArea, statusArea, quitButton); 
+		this.getChildren().add(vBox); 
+		
+		//Styling
+		seederLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+		portLabel.setFont(Font.font("Arial", FontWeight.SEMI_BOLD, 15));
+		listArea.setEditable(false);
+		statusArea.setEditable(false);
+		portField.setMaxWidth(55);
+		
+		//adding to the root
+		this.setAlignment(Pos.CENTER);
+		this.setPadding(new Insets(10));
+		
+		//Attributes
+		
+		
+		//actions
+		bindButton.setOnAction((event) ->
+		{
+			
+			
+		});
+		
+		addFilesButton.setOnAction((event) ->
+		{
+			//read the list file for the last file id wrote
+			
+			
+			
+		});
+		quitButton.setOnAction((event) ->
+		{
+			
+		});
+	}
+	private void WithdrawalGui()
+	{
+		//Elements
+		Label seederLabel = new Label("Withdrawal"); 
+		Label portLabel = new Label("Available Balance:"); 
+		TextField portField = new TextField("R "+ AvailableBalance);
+		Button bindButton = new Button("Withdrawal Amount");  
+		Button addFilesButton = new Button("Withdraw"); 
+		TextArea listArea = new TextArea("List: \n"); 
+		TextArea statusArea = new TextArea("Status Area: \n"); 
+		Label $Account_Type = new Label("Account Type:"); 
+		ComboBox<String> cBox1 = new ComboBox<>();
+    	ObservableList<String> Options = FXCollections.observableArrayList("Cheque","Savings","Credit");
+    	cBox1.setItems(Options);
+    	cBox1.valueProperty().addListener(new ChangeListener<String>() {
+
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				if(newValue.equals("Cheque")){
+					//Type = new String(newValue);
+				
+				}
+				else if(newValue.equals("Savings")) {
+					//Type = new String(newValue);
+				
+				}
+				else if(newValue.equals("Credit")){
+					//Type = new String(newValue);
+					
+				}
+			}
+		});
+    	Button quitButton = new Button("Quit"); 
+		
+		//Arranging Elements
+		HBox firstHBox = new HBox(5, portLabel, portField, bindButton,$Account_Type,cBox1);
 		
 		VBox vBox = new VBox(10, seederLabel, addFilesButton, firstHBox, listArea, statusArea, quitButton); 
 		this.getChildren().add(vBox); 
