@@ -38,7 +38,7 @@ public class ATMInterfacePane extends GridPane{
 	private boolean Withdrawal = false;
 	private boolean Deposit = false;
 	private boolean BalanceCheck = false;
-	private double AvailableBalance = 0.00;
+	private double AvailableBalance =500.00;
 	public ATMInterfacePane(Stage PrimaryStage) {
 		this.primarystage = PrimaryStage;
 		TypeSelector();
@@ -247,6 +247,7 @@ public class ATMInterfacePane extends GridPane{
 		{
 			//var Amounttowithdraw = WithdrawalAmount.getText();
 			//read the list file for the last file id wrote
+            withdraw(AvailableBalance, Integer.parseInt(WithdrawalAmount.getText()));
 			if((Integer.parseInt(WithdrawalAmount.getText()) > AvailableBalance)&& (Integer.parseInt(WithdrawalAmount.getText()) <= 0)) {
 				alert(AlertType.INFORMATION, "You Have Insufficient Funds!"); 
 			}
@@ -340,5 +341,25 @@ public class ATMInterfacePane extends GridPane{
 		alert.setContentText(message);
 		alert.initModality(Modality.APPLICATION_MODAL);
 		alert.showAndWait();
+	}
+	
+	private double withdraw(double $balance ,int $withdwal_Amount) {
+		if ($withdwal_Amount > $balance) {
+			alert(AlertType.INFORMATION, "You Have Insufficient Funds to make a withdraw Transaction!"); 
+			return $withdwal_Amount;
+		}else if($withdwal_Amount <0){
+			alert(AlertType.INFORMATION, "Amount cannot be less than 0!"); 
+			return $withdwal_Amount;
+		}
+		
+		return ($balance-$withdwal_Amount);
+	}
+	private double depositCash(double Balance ,double DepositAmount) {
+		if(DepositAmount >0) {
+			return(Balance+ DepositAmount);
+		}else {
+			alert(AlertType.INFORMATION, "Please provide a deposit Amount greater than 0!"); 
+			return Balance;
+		}
 	}
 }
