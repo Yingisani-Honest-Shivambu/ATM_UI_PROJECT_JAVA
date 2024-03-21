@@ -247,12 +247,19 @@ public class ATMInterfacePane extends GridPane{
 		{
 			//var Amounttowithdraw = WithdrawalAmount.getText();
 			//read the list file for the last file id wrote
-            withdraw(AvailableBalance, Integer.parseInt(WithdrawalAmount.getText()));
-			if((Integer.parseInt(WithdrawalAmount.getText()) > AvailableBalance)&& (Integer.parseInt(WithdrawalAmount.getText()) <= 0)) {
+            withdraw( Integer.parseInt(WithdrawalAmount.getText()));
+            
+			if((Integer.parseInt(WithdrawalAmount.getText()) > AvailableBalance)) {
 				alert(AlertType.INFORMATION, "You Have Insufficient Funds!"); 
+				statusArea.setText("Status: \n  Your Withdrawal Transaction Was Unsuccesful!");
+				return;
+			}else if((Integer.parseInt(WithdrawalAmount.getText()) < 0)) {
+				//alert(AlertType.INFORMATION, "You cant withdraw a negative amount!"); 
+				statusArea.setText("Status: \n  Your Withdrawal Transaction Was Unsuccesful!");
+				return;
 			}
-			
-			
+			statusArea.setText("Status: \n  Your Withdrawal Transaction Was Succesful!");
+			AvailableField.setText("R"+ AvailableBalance);
 		});
 		quitButton.setOnAction((event) ->
 		{
@@ -265,43 +272,50 @@ public class ATMInterfacePane extends GridPane{
 	private void DepositGui()
 	{
 		//Elements
-		Label leecherLabel = new Label("Deposit Funds"); 
-		Label conToServerLabel = new Label("Connect To Seeder"); 
-		Label addressLabel = new Label("Address");
-		TextField addressField = new TextField("localhost"); 
-		Label portLabel = new Label("Port");
-		TextField portField = new TextField("2022"); 
-		Button connectButton = new Button("Connect"); 
-		Label requestLabel = new Label("Request"); 
-		Button getListButton = new Button("Get List"); 
-		Label getFileLabel = new Label("Get File"); 
-		TextField getFileField = new TextField(); 
-		Button getFileButton = new Button("Get File"); 
-		TextArea listArea = new TextArea("List:\n"); 
+		Label DepositLabel = new Label("Deposit Funds"); 
+		Label HeadingLabel = new Label("Enter Your Information"); 
+		Label AccountNumberLabel = new Label("Account Number:");
+		TextField AccountNumberField = new TextField(); 
+		AccountNumberField.setPromptText("4251 5689 1234");
+		Label RecRefLabel = new Label("Receipient Reference:");
+		
+		TextField RecRefTextField = new TextField();
+		RecRefTextField.setPromptText("Yingisani Honest");
+		Label ResenderRefLabel = new Label("Sender Refrence:");
+		TextField ResenderRefTextField = new TextField();
+		ResenderRefTextField.setPromptText("SHIVAMBU YH");
+		Label AmountLabel = new Label("Amount");
+		TextField AmountField = new TextField(); 
+		AmountField.setPromptText("R200");
+		Label ProcessLabel = new Label("Press Button To complete Transaction"); 
+		Button DepositButton = new Button("Deposit");  
 		TextArea statusArea = new TextArea("Status Area:\n");
+		Label NewBalanceLabel = new Label("New Balance:");
+		TextField NewField = new TextField(); 
 		
 		//Arranging 
-		HBox firstHBox = new HBox(10, addressLabel, addressField, portLabel, portField, connectButton); 
-		HBox secHBox = new HBox(10, getListButton, getFileLabel, getFileField, getFileButton); 
+		HBox firstHBox = new HBox(10, AccountNumberLabel, AccountNumberField, AmountLabel, AmountField); 
+		HBox SecondtHBox = new HBox(10, RecRefLabel, RecRefTextField); 
+		HBox ThirdfirstHBox = new HBox(10, ResenderRefLabel, ResenderRefTextField); 
+		HBox secHBox = new HBox(10, DepositButton); 
+		HBox FourththHBox = new HBox(10,NewBalanceLabel,NewField);
 		
-		VBox vBox = new VBox(10, leecherLabel, conToServerLabel, firstHBox,requestLabel ,secHBox, listArea, statusArea); 
+		VBox vBox = new VBox(10, DepositLabel, HeadingLabel, firstHBox,SecondtHBox,ThirdfirstHBox,ProcessLabel ,secHBox, statusArea,FourththHBox); 
 		
 		//styling
-		leecherLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-		conToServerLabel.setFont(Font.font("Arial", FontWeight.SEMI_BOLD, 17));
-		conToServerLabel.underlineProperty().setValue(true);
-		addressLabel.setFont(Font.font("Arial", FontWeight.SEMI_BOLD, 15));
-		requestLabel.setFont(Font.font("Arial", FontWeight.SEMI_BOLD, 17));
-		requestLabel.underlineProperty().setValue(true);
-		addressLabel.setFont(Font.font("Arial", FontWeight.SEMI_BOLD, 15));
-		portLabel.setFont(Font.font("Arial", FontWeight.SEMI_BOLD, 15));
-		getFileLabel.setFont(Font.font("Arial", FontWeight.SEMI_BOLD, 15));
-		listArea.setEditable(false);
+		DepositLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+		HeadingLabel.setFont(Font.font("Arial", FontWeight.SEMI_BOLD, 17));
+		HeadingLabel.underlineProperty().setValue(true);
+		RecRefLabel.setFont(Font.font("Arial", FontWeight.SEMI_BOLD, 15));
+		ResenderRefLabel.setFont(Font.font("Arial", FontWeight.SEMI_BOLD, 15));
+		ProcessLabel.setFont(Font.font("Arial", FontWeight.SEMI_BOLD, 17));
+		ProcessLabel.underlineProperty().setValue(true);
+		RecRefLabel.setFont(Font.font("Arial", FontWeight.SEMI_BOLD, 15));
+		ResenderRefLabel.setFont(Font.font("Arial", FontWeight.SEMI_BOLD, 15));
+		AmountLabel.setFont(Font.font("Arial", FontWeight.SEMI_BOLD, 15));
 		statusArea.setEditable(false);
 		statusArea.setMaxHeight(100);
-		listArea.setMaxHeight(150);
-		portField.setMaxWidth(55);
-		getFileField.setMaxWidth(50);
+		AmountLabel.setMaxWidth(55);
 		
 		//adding
 		this.getChildren().add(vBox); 
@@ -310,25 +324,14 @@ public class ATMInterfacePane extends GridPane{
 		this.setAlignment(Pos.CENTER);
 		this.setPadding(new Insets(10));
 		
-		//actions
-		connectButton.setOnAction((event) -> 
+		
+		DepositButton.setOnAction((event) -> 
 		{
-			
+		  depositCash(Integer.parseInt(AmountField.getText()));
+		  NewField.setText("R"+AvailableBalance);
+		  
 			
 		});
-		getListButton.setOnAction((event) -> 
-		{
-		
-			
-		});
-		getFileButton.setOnAction((event) -> 
-		{
-			
-			
-		});
-		
-		
-		
 	}
 	/**
 	 * This method defines a general use case of the AlertType
@@ -343,23 +346,25 @@ public class ATMInterfacePane extends GridPane{
 		alert.showAndWait();
 	}
 	
-	private double withdraw(double $balance ,int $withdwal_Amount) {
-		if ($withdwal_Amount > $balance) {
+	private void withdraw(int $withdwal_Amount) {
+		if ($withdwal_Amount > AvailableBalance) {
 			alert(AlertType.INFORMATION, "You Have Insufficient Funds to make a withdraw Transaction!"); 
-			return $withdwal_Amount;
+			//return $balance;
 		}else if($withdwal_Amount <0){
 			alert(AlertType.INFORMATION, "Amount cannot be less than 0!"); 
-			return $withdwal_Amount;
+			//return $balance;
+		}else {
+			 AvailableBalance-=$withdwal_Amount;
 		}
 		
-		return ($balance-$withdwal_Amount);
+		
 	}
-	private double depositCash(double Balance ,double DepositAmount) {
+	private void depositCash(double DepositAmount) {
 		if(DepositAmount >0) {
-			return(Balance+ DepositAmount);
+			AvailableBalance+= DepositAmount;
 		}else {
 			alert(AlertType.INFORMATION, "Please provide a deposit Amount greater than 0!"); 
-			return Balance;
+			
 		}
 	}
 }
