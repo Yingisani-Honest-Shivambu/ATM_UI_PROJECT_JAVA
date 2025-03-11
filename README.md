@@ -15,13 +15,13 @@ To run the ATM application:
 #### Compilation (If using a terminal):
 
 ```bash
-javac --module-path $PATH_TO_FX --add-modules javafx.controls,javafx.fxml ATMApplication.java
+javac --module-path $PATH_TO_FX --add-modules javafx.controls,javafx.fxml Main.java
 ```
 
 #### Running the application:
 
 ```bash
-java --module-path $PATH_TO_FX --add-modules javafx.controls,javafx.fxml ATMApplication
+java --module-path $PATH_TO_FX --add-modules javafx.controls,javafx.fxml Main
 ```
 
 ---
@@ -67,7 +67,7 @@ Displays basic ATM options such as:
 
 ## 5. How to Use
 
-1. Launch the application by running the `ATMApplication.java` class.
+1. Launch the application by running the `Main.java` class.
 2. Upon startup, the user will be presented with a main menu with the following options:
    - Withdraw
    - Deposit
@@ -80,10 +80,8 @@ Displays basic ATM options such as:
 
 ## 6. Code Structure
 
-- **`ATMApplication.java`**: Main class to launch the JavaFX application.  
-- **`ATMController.java`**: Controller class to handle the logic for each ATM operation (withdraw, deposit, balance check).  
-- **`BankAccount.java`**: Model class representing a user's bank account with methods for deposit, withdrawal, and balance check.  
-- **FXML Files**: The UI layout for the main menu, withdraw, deposit, and balance screens.  
+- **`Main.java`**: Main class to launch the JavaFX application.   
+- **ATMInterfacePane.Java**: The UI layout for the main menu, withdraw, deposit, and balance screens. Also handles the logic for each ATM operation (withdraw, deposit, balance check).  
 
 ---
 
